@@ -266,7 +266,7 @@ chokidar.watch('./mydb3.db').on('change', exportToCsv);
 // Start the server
 const join = require('path').join;
 const hostname = '127.0.0.1';
-const port = 6600;
+const port = process.env.PORT || 6600;
 
 app.use(express.static('public'));
 app.use(express.static(__dirname));
