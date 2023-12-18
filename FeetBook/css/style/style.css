@@ -87,6 +87,9 @@ main {
   font-size: 1.6em;
   margin: 5px auto;
 }
+.hero h2::after {
+  content: icon;
+}
 .hero h3 {
   color: hsla(234, 29%, 20%, 0.993);
   font-size: 1em;

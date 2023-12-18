@@ -9,9 +9,10 @@
     color: var(--Charcoal_Grey);
 }
 #weather-container {
-    background-color: #fff;
+    background-color: transparent;
+    backdrop-filter: blur(10px);
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow:  inset -2px -1px 15px 0px hsl(234deg 29% 20% / 35%);
     color: var(--Dark_Slate_Grey);
     max-width: 600px;
     margin: 0 auto;
@@ -28,8 +29,10 @@
     margin: 0 1px 1em 0;
 }
 #weatherinput{
-    border: 1px solid var(--Dark_Slate_Grey);
+    background: transparent;
+    border: none;
     border-radius: 5px;
+    box-shadow: inset -2px -1px 15px 0px hsl(234deg 29% 20% / 35%);
     height: 25px;
     max-width: 30%;
     padding-left: 6px;

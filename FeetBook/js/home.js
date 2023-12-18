@@ -59,6 +59,18 @@ function updateTime() {
     var minutes = now.getMinutes();
     var seconds = now.getSeconds();
     var ampm = hours >= 12 ? 'PM' : 'AM';
+    const greetingElement = document.querySelector('.hero-text h2');
+
+    let greeting;
+    if (hours < 12) {
+        greeting = 'Good Morning!';
+    } else if (hours < 18) {
+        greeting = 'Good Afternoon!';
+    } else {
+        greeting = 'Good Evening!';
+    }
+
+    greetingElement.textContent = greeting;
 
     // Convert hours from 24-hour to 12-hour format
     hours = hours % 12;
@@ -103,29 +115,47 @@ updateCountdown();
 setInterval(updateTime, 1000);
 var countdownInterval = setInterval(updateCountdown, 1000);
 
+// JavaScript
 document.addEventListener('DOMContentLoaded', () => {
     const w_input = document.querySelector("#weatherinput");
-    w_input.oninput = () => {
+    let weatherInterval;
+
+    w_input.addEventListener('input', function() {
         const apiKey = 'a235c7c68e5b0e456d4d5dce005cadf8'; // Replace with your API key
         const city = w_input.value.toUpperCase();
 
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        // Clear the previous interval if there is one
+        if (weatherInterval) {
+            clearInterval(weatherInterval);
+        }
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                displayWeather(data);
-            })
-            .catch(error => {
-                console.error('Error fetching weather data:', error);
-            });
+        // Set up a new interval to fetch weather data every 5 minutes
+        weatherInterval = setInterval(fetchWeather, 5 * 60 * 1000);
 
+        // Fetch the weather data immediately
+        fetchWeather();
+
+        function fetchWeather() {
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayWeather(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                });
+        }
+
+        // JavaScript
         function displayWeather(data) {
             const weatherContainer = document.getElementById('weather-info');
 
             const temperature = data.main.temp;
             const temperatureFahrenheit = temperature * 9/5 + 32;
             const description = data.weather[0].description;
+            const icon = data.weather[0].icon; // Get the icon code from the API
             const country = data.sys.country;
 
             // Get the current date and time
@@ -133,14 +163,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const date = now.toLocaleDateString();
             const time = now.toLocaleTimeString();
 
-            const weatherHTML = `
-                <p>City: ${city}, ${country}</p>
-                <!--<p>Date: ${date}, Time: ${time}</p>-->
-                <p>Temperature: ${temperature}°C or ${temperatureFahrenheit.toFixed(2)}°F</p>
-                <p>Description: ${description}</p>
-            `;
+            let weatherHTML = '';
+            if (w_input.value.trim() !== '') {
+                weatherHTML = `
+                    <p>City: ${city}, ${country}</p>
+                    <!--<p>Date: ${date}, Time: ${time}</p>-->
+                    <p style="margin-bottom: 0;">Temperature: ${temperature}°C or ${temperatureFahrenheit.toFixed(2)}°F</p>
+                    <div style="display: flex; justify-content: flex-start; align-items: center;"
+                    <p>Description: ${description}</p>
+                    <img src="http://openweathermap.org/img/w/${icon}.png" alt="${description}"> 
+                    </div>
+                `;
+            }
 
             weatherContainer.innerHTML = weatherHTML;
         }
-    }
+    });
 });

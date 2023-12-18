@@ -66,6 +66,9 @@ main{
         color: $Dark_Slate_Grey;
         font-size: 1.6em;
         margin: 5px auto;
+        &::after{
+            content: icon;
+        }
     }
     h3{
         color: $Dark_Slate_Grey;
