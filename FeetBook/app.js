@@ -20,10 +20,10 @@ const path = require('path');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const TOKEN_PATH = './token1.json';
+const TOKEN_PATH = 'token1.json';
 
 // Open a database handle
-var db = new sqlite3.Database('mydb3.db', sqlite3.OPEN_READWRITE, (err) => {
+var db = new sqlite3.Database('/Database/mydb3.db', sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     console.error(err.message);
   }
@@ -133,12 +133,12 @@ app.get('/signin', (req, res) => {
   res.sendFile(join(__dirname, 'signin.html'));
 });
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
   res.sendFile(join(__dirname, 'home.html'));
 });
 
-app.get('/home', (req, res) => {
-  res.redirect('/');//This should be for the homepage
+app.get('/', (req, res) => {
+  res.redirect('/home');//This should be for the homepage
 });
 
 app.post('/signin', async (req, res) => {
@@ -261,7 +261,7 @@ db.serialize(() => {
 }
 
 // Watch the SQLite database file for changes
-chokidar.watch('./mydb3.db').on('change', exportToCsv);
+chokidar.watch('/Database/mydb3.db').on('change', exportToCsv);
 
 // Start the server
 const join = require('path').join;
