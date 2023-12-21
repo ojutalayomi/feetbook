@@ -205,10 +205,13 @@
     "xtend": "^4.0.2",
     "yallist": "^4.0.0"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Ayomide Josiah Ojutalayo",
   "license": "ISC"
 }
