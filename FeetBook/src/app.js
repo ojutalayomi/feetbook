@@ -20,8 +20,15 @@ const mime = require('mime');
 require('dotenv').config();
 const session = require('express-session');
 const crypto = require('crypto');
+const cors = require('cors')
 
-
+app.use(cors(
+  {
+      origin: ["https://feetbook-dql9.vercel.app/"],
+      methods: ["POST", "GET"],
+      credentials: true
+  }
+));
 // Create an Express application
 const app = express();
 
