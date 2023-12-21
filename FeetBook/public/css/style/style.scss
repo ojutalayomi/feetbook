@@ -1,7 +1,7 @@
 @import "_globals";
 
 body{
-    background: linear-gradient(rgba(205, 217, 255, 0.116), hsla(4, 100%, 67%, 0.164)), url(/assets/images/12188676_4890914.jpg);
+    background: linear-gradient(rgba(205, 217, 255, 0.116), hsla(4, 100%, 67%, 0.164)), url(../12188676_4890914.jpg);
     box-sizing: border-box;
     color:$White;
     font-family: $font-name;
@@ -244,9 +244,6 @@ footer{
             margin: auto;
         }
         .footer-icon{
-            .active{
-                color: $Tomato;
-            } 
             .fa-solid{
                 color: $Dark_Slate_Grey;
                 font-size: 1.5em;
@@ -258,3 +255,6 @@ footer{
         }
     }
 }
+.active{
+    color: $Tomato !important;
+} 

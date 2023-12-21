@@ -7,7 +7,7 @@ const validator = require('validator');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const { successmsg, signup, sign_in } = require('./htmlfiles.js');
-var sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3').verbose();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const chokidar = require('chokidar');
 const fs = require('fs');
@@ -16,24 +16,59 @@ const {google} = require('googleapis');
 const bcrypt = require('bcrypt');
 const {OAuth2} = google.auth;
 const path = require('path');
-//require('dotenv').config();
+const mime = require('mime');
+require('dotenv').config();
+const session = require('express-session');
+const crypto = require('crypto');
+
+
+// Create an Express application
+const app = express();
+
+// Start the server
+const join = require('path').join;
+const hostname = '127.0.0.1';
+const port = process.env.PORT || 6600 || 5500;
+
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(__dirname));
+
+app.get('/signup', (req, res) => {
+    res.sendFile(join(__dirname, '../public/signup.html'));
+});
+
+app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+
+//
+//Create session secret
+const sessionSecret = crypto.randomBytes(64).toString('hex');
+
+//console.log(sessionSecret);
+
+app.use(session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false
+}));
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token1.json';
 
+const mydb = __dirname + '/../database/mydb.db';
 // Open a database handle
-var db = new sqlite3.Database('/Database/mydb3.db', sqlite3.OPEN_READWRITE, (err) => {
+var db = new sqlite3.Database(mydb, sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     console.error(err.message);
   }
-  console.log('Connected to the mydb3 database.');
+  console.log('Connected to the mydb database.');
 });
 
-db.configure('busyTimeout', 300000);
+//db.configure('busyTimeout', 300000);
 
-// Create an Express application
-const app = express();
 
 // Multer configuration
 const uploadPath = path.join(__dirname, 'uploads');
@@ -54,7 +89,7 @@ app.use(bodyParser.json());
 
 
 // Define a route to handle form submissions
-app.post('/signup_error', upload.single('myfile'),async (req, res) => {
+app.post('/sign-up', upload.single('myfile'),async (req, res) => {
     
   const time = new Date().toLocaleString();
   const firstname = req.body.firstname;
@@ -62,8 +97,9 @@ app.post('/signup_error', upload.single('myfile'),async (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
+  const saltRounds = 10;
 
-  const hashedPassword = await bcrypt.hash(password, 10); // 10 is the number of salt rounds
+  const hashedPassword = await bcrypt.hash(password, saltRounds); // 10 is the number of salt rounds
 
   
   
@@ -75,8 +111,6 @@ app.post('/signup_error', upload.single('myfile'),async (req, res) => {
     }
      // Validate the email address
     if (validator.isEmail(email)) {
-        // If the email is valid, do something with it (like save it in a database)
-        ;
         console.log(`Received a valid email: ${email}`);
         
     } else {
@@ -88,7 +122,7 @@ app.post('/signup_error', upload.single('myfile'),async (req, res) => {
     let checkDataSql = `SELECT * FROM users WHERE Usernames = ? OR Emails = ?`;
     let data = [username, email];
     
-    db.get(checkDataSql, data, function(err, row) {
+    db.get(checkDataSql, data, async function(err, row) {
       if (err) {
         return console.error(err.message);
       }
@@ -99,24 +133,20 @@ app.post('/signup_error', upload.single('myfile'),async (req, res) => {
         // Here you can send a response to the client to let them know that the data already exists
         return res.send(signup(firstname,lastname));
       } else {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        await sendConfirmationEmail(email, firstname, lastname, username, req);
+        let insertDataSql = `INSERT OR IGNORE INTO users (Time, Firstnames, Lastnames, Emails, Usernames, Passwords) VALUES (?, ?,?,?,?,?)`;
+        let data = [time, firstname, lastname, email, username, hashedPassword];
+
+        db.run(insertDataSql, data, function(err) {
+          if (err) {
+            return console.error(err.message);
+          }
+          console.log(`Row(s) inserted: ${this.lastID} - ${time} - ${firstname} - ${lastname} - ${email} - ${username} - ${hashedPassword}`);
+          exportToCsv();
+        });
         // If row is undefined, it means the username or email does not exist in the database, so you can insert the new data
         return res.send(successmsg(email,firstname,lastname,username));
-
-        // Send confirmation email
-        async function sendConfirmation() {
-          await sendConfirmationEmail(email, firstname, lastname, username, req);
-          let insertDataSql = `INSERT OR IGNORE INTO users (Time, Firstnames, Lastnames, Emails, Usernames, Passwords) VALUES (?, ?,?,?,?,?)`;
-          let data = [time, firstname, lastname, email, username, hashedPassword];
-
-          db.run(insertDataSql, data, function(err) {
-            if (err) {
-              return console.error(err.message);
-            }
-            console.log(`Row(s) inserted: ${this.lastID} - ${time} - ${firstname} - ${lastname} - ${email} - ${username} - ${hashedPassword}`);
-          });
-        }
-
-        sendConfirmation();
       }
     });
   });
@@ -130,11 +160,11 @@ app.post('/signup_error', upload.single('myfile'),async (req, res) => {
 });*/
 
 app.get('/signin', (req, res) => {
-  res.sendFile(join(__dirname, 'signin.html'));
+  res.sendFile(join(__dirname, '../public/signin.html'));
 });
 
 app.get('/home', (req, res) => {
-  res.sendFile(join(__dirname, 'home.html'));
+  res.sendFile(join(__dirname, '../public/home.html'));
 });
 
 app.get('/', (req, res) => {
@@ -220,7 +250,7 @@ async function sendSignInEmail(email) {
     attachments: [
       {
         filename: `Company-Logo.png`,
-        path: 'Newsletter-sign-up/public/assets/images/congrats.png', // Replace with your file path
+        path: 'FeetBook/public/images/congrats.png', // Replace with your file path
         cid: 'unique@kreata.ee' //same cid value as in the html img src
       },
     ]
@@ -229,10 +259,11 @@ async function sendSignInEmail(email) {
   console.log('Message sent: %s', info.messageId);
 }
 
+const mydbcsv = __dirname + '/../database/mydb.csv';
 function exportToCsv() {
   let data = [];
   let csvWriter = createCsvWriter({
-    path: 'out3.csv',
+    path: mydbcsv,
     header: [
       {id: 'Time', title: 'TIME'},
       {id: 'Firstnames', title: 'FIRSTNAMES'},
@@ -261,23 +292,7 @@ db.serialize(() => {
 }
 
 // Watch the SQLite database file for changes
-chokidar.watch('/Database/mydb3.db').on('change', exportToCsv);
-
-// Start the server
-const join = require('path').join;
-const hostname = '127.0.0.1';
-const port = process.env.PORT || 6600;
-
-app.use(express.static('public'));
-app.use(express.static(__dirname));
-
-app.get('/signup', (req, res) => {
-    res.sendFile(join(__dirname, 'signup.html'));
-});
-
-app.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
+chokidar.watch(mydb).on('change', exportToCsv);
 
 // Function to send confirmation email
 async function sendConfirmationEmail(email, firstname, lastname, username, req) {
@@ -306,7 +321,7 @@ async function sendConfirmationEmail(email, firstname, lastname, username, req) 
     attachments: [
         {
           filename: `Company-Logo.png`,
-          path: 'Newsletter-sign-up/public/assets/images/congrats.png', // Replace with your file path
+          path: 'FeetBook/public/images/congrats.png', // Replace with your file path
           cid: 'unique@kreata.ee' //same cid value as in the html img src
         },
         /*{

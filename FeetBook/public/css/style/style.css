@@ -1,9 +1,9 @@
 @font-face {
   font-family: "Roboto";
-  src: url("/assets/fonts/Roboto-Regular.ttf") format("truetype");
+  src: url("../fonts/Roboto-Regular.ttf") format("truetype");
 }
 body {
-  background: linear-gradient(rgba(205, 217, 255, 0.116), hsla(4, 100%, 67%, 0.164)), url(/assets/images/12188676_4890914.jpg);
+  background: linear-gradient(rgba(205, 217, 255, 0.116), hsla(4, 100%, 67%, 0.164)), url(../12188676_4890914.jpg);
   box-sizing: border-box;
   color: hsl(0, 0%, 100%);
   font-family: "Roboto", sans-serif;
@@ -214,11 +214,11 @@ main {
     text-align: center;
     border-radius: 25px;
     transform: rotate(20deg);
-    background-color: hsl(4, 100%, 67%);
+    background-color: #ff6257;
     color: white;
   }
   nav #nav .nav-links .dropdown-content {
-    background-color: hsl(4, 100%, 67%);
+    background-color: #ff6257;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     display: none;
     min-width: 60px;
@@ -232,7 +232,7 @@ main {
     text-decoration: none;
   }
   nav #nav .nav-links .dropdown-content a:hover {
-    color: hsl(4, 100%, 67%);
+    color: #ff6257;
   }
   footer {
     background-color: rgba(0, 0, 0, 0);
@@ -259,15 +259,15 @@ main {
   footer .footer {
     margin: auto;
   }
-  footer .footer-icon .active {
-    color: hsl(4, 100%, 67%);
-  }
   footer .footer-icon .fa-solid {
     color: hsla(234, 29%, 20%, 0.993);
     font-size: 1.5em;
     margin: 0 0.5rem;
   }
   footer .footer-icon .fa-solid:hover {
-    color: hsl(4, 100%, 67%);
+    color: #ff6257;
   }
+}
+.active {
+  color: #ff6257 !important;
 }/*# sourceMappingURL=style.css.map */

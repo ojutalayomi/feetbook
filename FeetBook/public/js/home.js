@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $(".fa-house").click(function(){
-        $(".nav i").replaceWith('<img src="./assets/images/img_avatar.png" width="32" height="32" alt="FeetBook Logo">');
+        $(".nav i").replaceWith('<img src="/images/img_avatar.png" width="32" height="32" alt="FeetBook Logo">');
         $("#home").show();
         $("#chat-page").hide();
         $("#explore-page").hide();
@@ -38,15 +38,15 @@ $(document).ready(function(){
     });
 
     $(".nav").on('click', 'i', function(){
-        $(".nav i").replaceWith('<img src="./assets/images/img_avatar.png" width="32" height="32" alt="FeetBook Logo">');
+        $(".nav i").replaceWith('<img src="/images/img_avatar.png" width="32" height="32" alt="FeetBook Logo">');
         $("#home").show();
         $("#settings-page").hide();
         $("nav").show();
         $(".hero").show();
     });
 
-    $(".footer-icon").click(function(){
-        $(".footer-icon").removeClass("active");
+    $(".fa-solid").click(function(){
+        $(".fa-solid").removeClass("active");
         $(this).addClass("active");
     });
 });
