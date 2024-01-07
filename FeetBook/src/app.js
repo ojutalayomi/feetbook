@@ -22,13 +22,7 @@ const session = require('express-session');
 const crypto = require('crypto');
 const cors = require('cors')
 
-app.use(cors(
-  {
-      origin: ["https://feetbook-dql9.vercel.app/"],
-      methods: ["POST", "GET"],
-      credentials: true
-  }
-));
+
 // Create an Express application
 const app = express();
 
@@ -44,11 +38,29 @@ app.get('/signup', (req, res) => {
     res.sendFile(join(__dirname, '../public/signup.html'));
 });
 
+app.get('/jquery', (req, res) => {
+  res.sendFile(join(__dirname, '../node_modules/jquery/dist/jquery.js'));
+});
+
+app.get('/game', (req, res) => {
+  res.sendFile(join(__dirname, '../public/game.html'));
+});
+
+app.get('/countdown', (req, res) => {
+  res.sendFile(join(__dirname, '../public/countdown.html'));
+});
+
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-
+app.use(cors(
+  {
+      origin: ["https://feetbook-dql9.vercel.app/"],
+      methods: ["POST", "GET"],
+      credentials: true
+  }
+));
 //
 //Create session secret
 const sessionSecret = crypto.randomBytes(64).toString('hex');

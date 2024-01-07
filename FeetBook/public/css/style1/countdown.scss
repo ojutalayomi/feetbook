@@ -1,0 +1,82 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url(https://ojutalayomi.github.io/I/Merienda-VariableFont_wght.ttf);
+}
+
+body{
+    background: url(../New-Year-2024-Profile-Picture-HD.jpg) no-repeat;
+    background-size: cover;
+    box-sizing: border-box;
+    color: White;
+    font-family: myFirstFont;
+    height: 100vh;
+    margin: 0;
+}
+
+main {
+    height: 100vh;
+    position: fixed;
+    width: 100vw;
+}
+
+video{
+  display: none;
+  height: 100%;
+  width: 100%;
+}
+
+.bgimg {
+    background: transparent;
+    backdrop-filter: blur(95px);
+    color: white;
+    font-size: 25px;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+
+    .greeting,.time{
+        display: table;
+        margin: 0 auto;
+        padding: 40px;
+    }
+    .greeting{
+        display: none;
+    }
+
+    .topleft {
+        position: absolute;
+        top: 0;
+        left: 16px;
+      }
+     
+      .bottomleft {
+        position: absolute;
+        bottom: 0;
+        left: 16px;
+      }
+
+      .middle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+
+        .churchlogo{
+            min-width: 516px;
+            width: 55vw;
+            margin-bottom: -40px;
+        }
+      }
+
+      #countdown{
+        font-size: 35px;
+        text-wrap: wrap;
+      }
+
+      hr {
+        margin: auto;
+        width: 40%;
+      }
+}

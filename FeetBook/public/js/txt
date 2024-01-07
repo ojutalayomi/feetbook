@@ -1,0 +1,46 @@
+const level= [
+  {
+    level: 1,
+    tries: 10,
+    min: 0,
+    max: 20
+  },
+  {
+    level: 2,
+    tries: 10,
+    min: 0,
+    max: 50 
+  },
+  {
+    level: 3,
+    tries: 10,
+    min: 0,
+    max: 100
+  },
+  {
+    level: 4,
+    tries: 10,
+    min: 0,
+    max: 100
+  }
+]
+
+var l;
+  l = 0;
+  var random_Number;
+
+$("#levels") is for a hidden input
+function getRandomInt() {
+     if($("#levels").val() > 1){
+      l += 1;
+      console.log(l);
+      console.log(level[l].max);
+    } 
+    
+    random_Number = Math.floor(Math.random() * level[l].max) + level[l].min;
+    console.log(random_Number);
+    console.log(l);
+    console.log(level[l].max);
+  } getRandomInt();
+
+I want to create a situation where immediately the value of the hidden input changes, the value of l changes and the value of any variable that depends on l changes too.

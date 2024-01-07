@@ -1,0 +1,91 @@
+// Get the modal
+var modal = document.querySelector("#myModal");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.querySelector("#output");
+var modalImg = document.querySelector("#img01");
+var captionText = document.querySelector("#caption");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+  captionText.innerHTML = this.alt;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal1.style.display = "none";
+}
+0
+var loadFile = function(event) {
+  //var image = document.getElementById('output');
+  img.src=URL.createObjectURL(event.target.files[0]);
+};
+
+// loader
+var loader = function () {
+  setTimeout(function () {
+      if ($('#loader').length > 0) {
+          $('#loader').removeClass('show');
+      }
+  }, 3000);
+};
+loader();
+
+
+let text;
+let user = prompt("\nPlease enter your name:", " ");
+if (user == null || user == "") {
+  text = "User cancelled the prompt.";
+} else {
+  text = "Hello " + user + "! How are you today?";
+}
+$(".userName").html(text);
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #draggable {
+      width: 100px;
+      height: 100px;
+      background-color: lightblue;
+      margin: 10px;
+      cursor: move;
+    }
+
+    #droppable {
+      width: 200px;
+      height: 200px;
+      border: 2px dashed gray;
+    }
+  </style>
+</head>
+<body>
+
+<div id="draggable" draggable="true" ondragstart="drag(event)">Drag me!</div>
+<div id="droppable" ondragover="allowDrop(event)" ondrop="drop(event)">Drop here!</div>
+
+<script>
+  function drag(event) {
+    event.dataTransfer.setData("text/plain", event.target.id);
+  }
+
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function drop(event) {
+    event.preventDefault();
+    var data = event.dataTransfer.getData("text/plain");
+    var draggedElement = document.getElementById(data);
+    event.target.appendChild(draggedElement);
+  }
+</script>
+
+</body>
+</html>
