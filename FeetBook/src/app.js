@@ -28,7 +28,7 @@ const app = express();
 
 // Start the server
 const join = require('path').join;
-const hostname = '127.0.0.1';
+//const hostname = '127.0.0.1';
 const port = process.env.PORT || 6600 || 5500;
 
 app.use(express.static(path.join(__dirname, '../public')));
@@ -50,8 +50,8 @@ app.get('/countdown', (req, res) => {
   res.sendFile(join(__dirname, '../public/countdown.html'));
 });
 
-app.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(port, () => {
+    console.log(`Server running on ${port}/`);
 });
 
 app.use(cors(
